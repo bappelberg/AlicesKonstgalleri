@@ -1,5 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>signup.html</h1>
+    <div class="container mt-4">
+
+        <div class="p-3 m-3">
+
+            <div class="col-lg-5 rounded mx-auto border pt-4" style="background-color: #f7f7f7; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <div class="text-center col">
+                    <img
+                        src="https://th.bing.com/th/id/Rd51d7c0fde6d96a31538a86cbd57f3c0?rik=%2fTJxRkU2V371QQ&riu=http%3a%2f%2ftechnologyend.com%2fwp-content%2fuploads%2f2015%2f11%2fwhy-shop-online.jpg&ehk=v1KiYT0i5U1ABCRueDSdLqnazh2BdlVD89Z4qXE0Kgs%3d&risl=&pid=ImgRaw"
+                        alt="Profilbild"
+                        class="rounded-circle" style="height: 120px; width: 120px; object-fit: cover; border: 4px solid #d4af37; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+                    <hr style="border-color: #d4af37;">
+                </div>
+                <h3 class="alert alert-info rounded-pill" style="text-align:center; background-color: #d4af37; border: none; color: white; font-family: 'Pacifico', sans-serif; font-size: 24px;">Skapa ett konto</h3>
+
+                <form action="/signup/" method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert" style="background-color: #ffe6e6; color: #b30000; font-size: 14px;">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Customer.first_name -->
+                    <div class="form-group">
+                        <label for="firstname" style="color: #333; font-weight: bold;">Förnamn</label>
+                        <input type="text" name="firstname" id="firstname" value="{{ values.first_name }}" class="form-control form-control-sm"
+                               style="border-radius: 12px; border-color: #d4af37;" placeholder="Förnamn">
+                    </div>
+
+                    <!-- Customer.last_name -->
+                    <div class="form-group">
+                        <label for="lastname" style="color: #333; font-weight: bold;">Efternamn</label>
+                        <input type="text" name="lastname" id="lastname" value="{{ values.last_name }}" class="form-control form-control-sm"
+                               style="border-radius: 12px; border-color: #d4af37;" placeholder="Efternamn">
+                    </div>
+
+                    <!-- Customer.phone -->
+                    <div class="form-group">
+                        <label for="phone" style="color: #333; font-weight: bold;">Telefonnummer</label>
+                        <input type="text" name="phone" id="phone" value="{{ values.phone }}" class="form-control form-control-sm"
+                               style="border-radius: 12px; border-color: #d4af37;" placeholder="073108742">
+                    </div>
+
+                    <!-- Customer.email -->
+                    <div class="form-group">
+                        <label for="email" style="color: #333; font-weight: bold;">E-post</label>
+                        <input required type="email" name="email" id="email" value="{{ values.email }}" class="form-control-sm form-control"
+                               style="border-radius: 12px; border-color: #d4af37;" placeholder="markus.appelberg@gmail.com">
+                    </div>
+
+                    <!-- Customer.password -->
+                    <div class="form-group">
+                        <label for="password" style="color: #333; font-weight: bold;">Lösenord</label>
+                        <input type="password" name="password" id="password" class="form-control form-control-sm"
+                               style="border-radius: 12px; border-color: #d4af37;">
+                    </div>
+
+                    <button type="submit" class="btn btn-sm col-lg-12" style="background-color: #d4af37; border-radius: 20px; color: white; font-weight: bold;">Skapa konto</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
