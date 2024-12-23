@@ -14,7 +14,46 @@ def index(request):
 
 # Login View
 def login(request):
+    # Retrieve the return_url if provided in the GET request
+    return_url = request.GET.get('return_url')
+
+    if request.method == 'POST':
+        # Get the POST data (email and password)
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        # Find the customer by email
+        customer = Customer.get_customer_by_email(email)
+        error_message = None
+
+        if customer:
+            # Check if the password matches
+            flag = check_password(password, customer.password)
+            if flag:
+                # Store customer ID and first_time current in the session
+                request.session['customer'] = customer.id
+                request.session['first_name'] = customer.first_name
+
+                # Redirect to return_url if provided, else to index
+                if return_url:
+                    return HttpResponseRedirect(return_url)
+                else:
+                    return redirect('index')
+            else:
+                error_message = 'Invalid password!'
+        else:
+            error_message = 'Invalid email!'
+
+        # If there's an error, render the login page with the error message
+        return render(request, 'login.html', {'error': error_message})
+
+    # If the method is GET, just render the login page
     return render(request, 'login.html')
+
+# Logout view
+def logout(request):
+    request.session.clear()  # Clear session to log out the user
+    return redirect('login')  # Redirect to login page
 
 
 # Orders View
