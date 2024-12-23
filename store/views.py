@@ -5,11 +5,65 @@ from django.contrib.auth.hashers import check_password, make_password
 
 # Cart View
 def cart(request):
-    return render(request, 'cart.html')
+    if request.method == 'GET':
+        ids = list(request.session.get('cart').keys())
+        products = Product.get_products_by_id(ids)
+        print(products)
+        return render(request, 'cart.html', {'products': products})
+
+def check_out(request):
+    address = request.POST.get('address')
+    phone = request.POST.get('phone')
+    customer = request.session.get('customer')
+    cart = request.session.get('cart')
+    products = Product.get_products_by_id(list(cart.keys()))
+    print(address, phone, customer, cart, products)
+
+    for product in products:
+        print(cart.get(str(product.id)))
+        order = Order(customer=Customer(id=customer),
+                      product=product,
+                      price=product.price,
+                      address=address,
+                      phone=phone,
+                      quantity=cart.get(str(product.id)))
+
+        # order.save() to be implemented
+
+    request.session['cart'] = {}
+
+    return redirect('cart')
+
 
 # Index View
 def index(request):
-    return render(request, 'index.html')
+    if request.method == 'POST':
+        product = request.POST.get('product')
+        remove = request.POST.get('remove')
+        cart = request.session.get('cart')
+        if cart:
+            quantity = cart.get(product)
+            if quantity:
+                if remove:
+                    if quantity <= 1:
+                        cart.pop(product)
+                    else:
+                        cart[product] = quantity - 1
+                else:
+                    cart[product] = quantity + 1
+
+            else:
+                cart[product] = 1
+        else:
+            cart = {}
+            cart[product] = 1
+
+        request.session['cart'] = cart
+        print('cart', request.session['cart'])
+        return redirect('index')
+
+    if request.method == 'GET':
+        return HttpResponseRedirect(f'/store{request.get_full_path()[1:]}')
 
 
 # Login View
@@ -49,6 +103,7 @@ def login(request):
 
     # If the method is GET, just render the login page
     return render(request, 'login.html')
+
 
 # Logout view
 def logout(request):
@@ -144,4 +199,3 @@ def validate_customer(customer):
     elif customer.is_exists():
         error_message = 'E-postadressen finns redan registrerad i vårt system'
     return error_message
-

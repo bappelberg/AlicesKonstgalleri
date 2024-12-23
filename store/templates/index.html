@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% load cart %}
+    {% load custom_filter %}
     <div class="container-fluid mt-3">
         <div class="row">
-
 
 
             <div class="col-lg-3 mx-auto">
@@ -24,16 +25,18 @@
                         <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
                         <div class="card-body">
                             <p class="card-title">{{ product.name }}</p>
+                            <p class="card-text"><b>{{ product.price|currency }}</b></p>
+
                         </div>
 
                         <div class="card-footer p-0 no-gutters">
 
-                                <form action="/#{{ product.id }}" method="POST" class="btn-block">
-                                    {% csrf_token %}
-                                    <input hidden type="text" name='product' value='{{ product.id }}'>
-                                    <input type="submit" class="float-right btn btn-success form-control"
-                                           value="Add To Cart">
-                                </form>
+                            <form action="/#{{ product.id }}" method="POST" class="btn-block">
+                                {% csrf_token %}
+                                <input hidden type="text" name='product' value='{{ product.id }}'>
+                                <input type="submit" class="float-right btn btn-success form-control"
+                                       value="Add To Cart">
+                            </form>
 
                         </div>
 
