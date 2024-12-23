@@ -11,18 +11,58 @@
     <title>Alices Konstgalleri</title>
 
     <style>
+        /* Navbar color */
         nav {
-            background-color: green;
+            background-color: #d4af37; /* Gyldne färgen */
         }
 
+        /* Skugga på navbar */
         .one-edge-shadow {
             box-shadow: 0 8px 2px -5px rgb(246, 245, 245);
         }
 
+        /* Färg och stil på displaytext */
         .display-8 {
             font-weight: 200;
             font-size: 30px;
-            font-colour: $ teal-200;
+            color: teal;
+        }
+
+        /* Färger för formulärfält */
+        .form-control-sm {
+            border-radius: 12px;
+            border-color: #d4af37; /* Samma färg som navbar */
+        }
+
+        /* Speciell stil för knappar */
+        .btn-primary {
+            background-color: #d4af37;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Färgsättning för knappar på hover */
+        .btn-primary:hover {
+            background-color: #bfa437;
+        }
+
+        /* Övriga stilar för layout */
+        .container {
+            margin-top: 30px;
+        }
+
+        .form-group label {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .alert-info {
+            background-color: #d4af37;
+            border: none;
+            color: white;
+            font-family: 'Pacifico', sans-serif;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -30,43 +70,32 @@
 <body>
 <!-- navbar -->
 
-<nav class="one-edge-shadow
-  navbar navbar-light
-  sticky-top navbar
-  navbar-expand-lg
-  text-white">
-    <a class="navbar-brand ms-3 text-dark " href="/">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-              integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
-              crossorigin="anonymous">
-
+<nav class="one-edge-shadow navbar navbar-light sticky-top navbar-expand-lg text-white">
+    <a class="navbar-brand ms-3 text-dark" href="/">
         <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png"
-             style="width:50px;height:50px,color:text-light;">Alices Konstgalleri</a>
+             style="width:50px;height:50px;">
+        Alices Konstgalleri
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="/store">Store <span class="sr-only">(current)</span></a>
             </li>
-
         </ul>
 
-
-        <ul class=" navbar-nav my-2 my-lg-0">
-
+        <ul class="navbar-nav my-2 my-lg-0">
             <li class="nav-item active">
                 <a class="nav-link" href="/cart">Cart
                     <span class="badge badge-success">{{ request.session.cart.keys|length }}</span>
-                    <span class="sr-only">(current)</span></a>
+                </a>
             </li>
 
             {% if request.session.customer %}
-
                 <li class="nav-item active ">
                     <a class="nav-link" href="/orders">Orders<span class="sr-only">(current)</span></a>
                 </li>
@@ -77,7 +106,6 @@
                     <span class="nav-link">{{ request.session.first_name }}</span>
                 </li>
             {% else %}
-
                 <li class="nav-item active">
                     <a class="nav-link" href="/signup">Signup<span class="sr-only">(current)</span></a>
                 </li>
@@ -85,15 +113,69 @@
                     <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
                 </li>
             {% endif %}
-
-
         </ul>
-
-
     </div>
 </nav>
-<!---->
-{% block content %}{% endblock %}
+
+<!-- Main content -->
+{% block content %}
+    <div class="container mt-4">
+        <div class="p-3 m-3">
+            <div class="col-lg-5 rounded mx-auto border pt-4" style="background-color: #f7f7f7; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+                <div class="text-center col">
+                    <img src="https://th.bing.com/th/id/Rd51d7c0fde6d96a31538a86cbd57f3c0?rik=%2fTJxRkU2V371QQ&riu=http%3a%2f%2ftechnologyend.com%2fwp-content%2fuploads%2f2015%2f11%2fwhy-shop-online.jpg&ehk=v1KiYT0i5U1ABCRueDSdLqnazh2BdlVD89Z4qXE0Kgs%3d&risl=&pid=ImgRaw"
+                         alt="Profilbild"
+                         class="rounded-circle" style="height: 120px; width: 120px; object-fit: cover; border: 4px solid #d4af37; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+                    <hr style="border-color: #d4af37;">
+                </div>
+                <h3 class="alert alert-info rounded-pill" style="text-align:center;">Skapa ett konto</h3>
+
+                <form action="/signup/" method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert" style="background-color: #ffe6e6; color: #b30000; font-size: 14px;">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Customer.first_name -->
+                    <div class="form-group">
+                        <label for="firstname">Förnamn</label>
+                        <input type="text" name="firstname" id="firstname" value="{{ values.first_name }}" class="form-control form-control-sm" placeholder="Förnamn">
+                    </div>
+
+                    <!-- Customer.last_name -->
+                    <div class="form-group">
+                        <label for="lastname">Efternamn</label>
+                        <input type="text" name="lastname" id="lastname" value="{{ values.last_name }}" class="form-control form-control-sm" placeholder="Efternamn">
+                    </div>
+
+                    <!-- Customer.phone -->
+                    <div class="form-group">
+                        <label for="phone">Telefonnummer</label>
+                        <input type="text" name="phone" id="phone" value="{{ values.phone }}" class="form-control form-control-sm" placeholder="073108742">
+                    </div>
+
+                    <!-- Customer.email -->
+                    <div class="form-group">
+                        <label for="email">E-post</label>
+                        <input required type="email" name="email" id="email" value="{{ values.email }}" class="form-control-sm form-control" placeholder="markus.appelberg@gmail.com">
+                    </div>
+
+                    <!-- Customer.password -->
+                    <div class="form-group">
+                        <label for="password">Lösenord</label>
+                        <input type="password" name="password" id="password" class="form-control form-control-sm">
+                    </div>
+
+                    <button type="submit" class="btn btn-sm col-lg-12">Skapa konto</button>
+                    <hr>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
