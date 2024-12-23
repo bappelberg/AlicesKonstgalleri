@@ -28,7 +28,7 @@ def check_out(request):
                       phone=phone,
                       quantity=cart.get(str(product.id)))
 
-        # order.save() to be implemented
+        order.save()
 
     request.session['cart'] = {}
 
@@ -113,7 +113,11 @@ def logout(request):
 
 # Orders View
 def orders(request):
-    return render(request, 'orders.html')
+    if request.method == 'GET':
+        customer = request.session.get('customer')
+        orders = Order.get_orders_by_customer(customer)
+        print(orders)
+        return render(request, 'orders.html', {'orders': orders})
 
 
 # Store View
